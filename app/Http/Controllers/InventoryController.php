@@ -4,38 +4,66 @@ namespace App\Http\Controllers;
 
 use App\Models\Inventory;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use Inertia\Response;
 
 class InventoryController extends Controller
 {
-    public function index(): Response
+    public function index(Request $request): Response
     {
-        $inventories = Inventory::all();
-        return Inertia::render('Inventory/Index', ['inventories' => $inventories]);
+        $search = $request->input('search');
+
+        $inventories = Inventory::query()
+            ->when($search, function ($query, $search) {
+                return $query->where('item_code', 'like', "%{$search}%")
+                    ->orWhere('item_description', 'like', "%{$search}%");
+            })
+            ->paginate(1) // Paginate with 10 items per page
+            ->appends($request->query()); // Retain search query in pagination links
+
+        return Inertia::render('Inventory/Index', [
+            'inventories' => $inventories,
+            'filters' => $request->only('search') // Retain search term in frontend
+        ]);
     }
 
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required|string|max:255',
-            'quantity' => 'required|integer',
-            'price' => 'required|numeric',
+            'item_code' => 'required|string|max:255',
+            'item_description' => 'required|string|max:255',
+            'item_qty' => 'required|integer',
+            'item_price' => 'required|numeric',
         ]);
 
-        Inventory::create($request->all());
+        Inventory::create([
+            'item_code' => $request->item_code,
+            'item_description' => $request->item_description,
+            'item_qty' => $request->item_qty,
+            'item_price' => $request->item_price,
+            'created_by' => Auth::id(),
+        ]);
+
         return redirect()->route('inventory.index');
     }
 
     public function update(Request $request, Inventory $inventory)
     {
         $request->validate([
-            'name' => 'required|string|max:255',
-            'quantity' => 'required|integer',
-            'price' => 'required|numeric',
+            'item_code' => 'required|string|max:255',
+            'item_description' => 'required|string|max:255',
+            'item_qty' => 'required|integer',
+            'item_price' => 'required|numeric',
         ]);
 
-        $inventory->update($request->all());
+        $inventory->update([
+            'item_code' => $request->item_code,
+            'item_description' => $request->item_description,
+            'item_qty' => $request->item_qty,
+            'item_price' => $request->item_price,
+            'updated_by' => Auth::id(),
+        ]);
         return redirect()->route('inventory.index');
     }
 
