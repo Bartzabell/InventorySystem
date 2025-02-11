@@ -2,6 +2,7 @@
 import { ref, watch, computed } from 'vue';
 import { useForm, router } from '@inertiajs/vue3';
 import AppLayout from '@/Layouts/AppLayout.vue';
+import SearchableDropdown from '@/Components/SearchableDropdown.vue';
 
 const props = defineProps({
     sales: Object,
@@ -60,21 +61,12 @@ const cancelSale = (id) => {
                 <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
                     <div>
                         <label class="block mb-2 text-sm font-medium">Select Item</label>
-                        <select
-                            v-model="selectedItem"
-                            @change="form.item_id = selectedItem"
-                            class="w-full p-2 border rounded"
-                        >
-                            <option value="">Select an item</option>
-                            <option
-                                v-for="item in inventory"
-                                :key="item.id"
-                                :value="item.id"
-                            >
-                                {{ item.item_code }} - {{ item.item_description }}
-                                (Stock: {{ item.item_qty }})
-                            </option>
-                        </select>
+                        <SearchableDropdown
+                        v-model="selectedItem"
+                        :items="inventory"
+                        placeholder="Search for an item..."
+                        @change="form.item_id = $event.id"
+                        />
                     </div>
 
                     <div>
