@@ -100,6 +100,7 @@ const submit = () => {
                         <th class="p-2 border">Name</th>
                         <th class="p-2 border">Quantity</th>
                         <th class="p-2 border">Price</th>
+                        <th class="p-2 border">Total Amount</th>
                         <th class="p-2 border">Actions</th>
                     </tr>
                 </thead>
@@ -108,6 +109,7 @@ const submit = () => {
                         <td class="p-2 border">{{ inventory.item_code }}</td>
                         <td class="p-2 border">{{ inventory.item_qty }}</td>
                         <td class="p-2 border">{{ inventory.item_price }}</td>
+                        <td class="p-2 border">{{ inventory.total_amount }}</td>
                         <td class="p-2 border">
                             <button @click="edit(inventory)" class="text-blue-500">Edit</button>
                             <button @click="deleteItem(inventory.id)" class="ml-2 text-red-500">Delete</button>

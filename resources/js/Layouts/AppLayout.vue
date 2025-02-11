@@ -57,7 +57,12 @@ const logout = () => {
                             </div>
                             <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                                 <NavLink :href="route('inventory.index')" :active="route().current('inventory.index')">
-                                    Inventory System
+                                    Inventory Page
+                                </NavLink>
+                            </div>
+                            <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                                <NavLink :href="route('sales.index')" :active="route().current('sales.index')">
+                                    Sales Page
                                 </NavLink>
                             </div>
                         </div>

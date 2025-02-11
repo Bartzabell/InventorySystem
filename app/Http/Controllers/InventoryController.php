@@ -45,6 +45,7 @@ class InventoryController extends Controller
             'item_description' => $request->item_description,
             'item_qty' => $request->item_qty,
             'item_price' => $request->item_price,
+            'total_amount' =>($request->item_price * $request->item_qty),
             'created_by' => Auth::id(),
         ]);
 
@@ -65,6 +66,7 @@ class InventoryController extends Controller
             'item_description' => $request->item_description,
             'item_qty' => $request->item_qty,
             'item_price' => $request->item_price,
+            'total_amount' => ($request->item_price * $request->item_qty),
             'updated_by' => Auth::id(),
         ]);
         return redirect()->route('inventory.index');

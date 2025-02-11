@@ -12,7 +12,7 @@ class Inventory extends Model
     use SoftDeletes;
 
     protected $fillable = [
-        'item_code', 'item_description', 'item_qty', 'item_price', 'created_by', 'updated_by', 'deleted_by'
+        'item_code', 'item_description', 'item_qty', 'item_price', 'total_amount', 'created_by', 'updated_by', 'deleted_by'
     ];
 
 }

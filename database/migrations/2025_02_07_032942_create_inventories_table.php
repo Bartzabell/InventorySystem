@@ -13,6 +13,7 @@ return new class extends Migration {
             $table->string('item_description');
             $table->integer('item_qty');
             $table->decimal('item_price', 10, 2);
+            $table->decimal('total_amount', 10, 2)->nullable();
             $table->unsignedBigInteger('created_by')->nullable();
             $table->unsignedBigInteger('updated_by')->nullable();
             $table->unsignedBigInteger('deleted_by')->nullable();
