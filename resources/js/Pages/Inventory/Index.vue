@@ -90,15 +90,9 @@ const submit = () => {
 
         <div class="p-6 mt-2 bg-white rounded shadow">
             <!-- Search Bar -->
-            <div class="mb-4">
-                <input
-                    type="text"
-                    v-model="search"
-                    placeholder="Search items..."
-                    class="w-full p-2 border rounded"
-                >
+            <div class="flex justify-end mb-4">
+                <input type="text" v-model="search" placeholder="Search items..." class="p-2 border rounded ">
             </div>
-
             <!-- Inventory Table -->
             <table class="w-full border border-collapse border-gray-200">
                 <thead>
@@ -123,7 +117,7 @@ const submit = () => {
             </table>
 
             <!-- Pagination -->
-            <div class="flex justify-center mt-4">
+            <div class="flex justify-end mt-4 mr-4">
                 <button
                     v-if="inventories.prev_page_url"
                     @click="router.get(inventories.prev_page_url, {}, { preserveState: true, replace: true })"

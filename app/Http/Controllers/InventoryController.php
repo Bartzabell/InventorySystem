@@ -14,12 +14,15 @@ class InventoryController extends Controller
     {
         $search = $request->input('search');
 
+        //FOR TABLE PAGINATION AND SEARCH
         $inventories = Inventory::query()
             ->when($search, function ($query, $search) {
                 return $query->where('item_code', 'like', "%{$search}%")
-                    ->orWhere('item_description', 'like', "%{$search}%");
+                    ->orWhere('item_description', 'like', "%{$search}%")
+                    ->orWhere('item_price', 'like', "%{$search}%")
+                    ->orWhere('item_qty', 'like', "%{$search}%");
             })
-            ->paginate(1) // Paginate with 10 items per page
+            ->paginate(5)
             ->appends($request->query()); // Retain search query in pagination links
 
         return Inertia::render('Inventory/Index', [
