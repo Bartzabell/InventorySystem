@@ -1,0 +1,8 @@
+{
+	"appId": "com.local.inventorysystem",
+	"appName": "Inventory System",
+	"webDir": "public/build",
+	"server": {
+		"androidScheme": "https"
+	}
+}
