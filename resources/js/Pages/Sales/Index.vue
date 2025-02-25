@@ -3,6 +3,7 @@ import { ref, watch, computed } from 'vue';
 import { useForm, router } from '@inertiajs/vue3';
 import AppLayout from '@/Layouts/AppLayout.vue';
 import SearchableDropdown from '@/Components/SearchableDropdown.vue';
+import Receipt from '@/Pages/Sales/Receipt.vue';
 
 const props = defineProps({
     sales: Object,
@@ -11,6 +12,18 @@ const props = defineProps({
 });
 
 const search = ref(props.filters.search || '');
+
+const showReceipt = ref(false);
+const selectedSale = ref(null);
+
+const openReceipt = (sale) => {
+    selectedSale.value = sale;
+    showReceipt.value = true;
+};
+
+const printReceipt = () => {
+    window.print();
+};
 
 // Watch for search input and debounce API call
 watch(search, (value) => {
@@ -147,16 +160,52 @@ const cancelSale = (id) => {
                         <td class="p-2 border">₱{{ sale.amount_sold }}</td>
                         <td class="p-2 border">{{ new Date(sale.created_at).toLocaleDateString() }}</td>
                         <td class="p-2 border">
-                            <button
-                                @click="cancelSale(sale.id)"
-                                class="text-red-500 hover:text-red-700"
-                            >
-                                Cancel
-                            </button>
+                            <div class="gap-x-2">
+                                <button
+                                    @click="cancelSale(sale.id)"
+                                    class="text-red-500 hover:text-red-700"
+                                >
+                                    Cancel
+                                </button>
+                                <button
+                                    @click="openReceipt(sale)"
+                                    class="text-blue-500 hover:text-blue-700"
+                                >
+                                    Print
+                                </button>
+                            </div>
                         </td>
                     </tr>
                 </tbody>
             </table>
+
+            <div v-if="showReceipt && selectedSale"
+                class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+                <div class="p-4 bg-white rounded-lg">
+                    <div class="flex justify-end mb-4">
+                        <button
+                            @click="showReceipt = false"
+                            class="text-gray-500 hover:text-gray-700"
+                        >
+                            Close
+                        </button>
+                    </div>
+                    <Receipt
+                        :sale="selectedSale"
+                        storeName="Inventory System"
+                        storeAddress="Dasmarinas Cavite"
+                        storePhone="+63 999 999 9999"
+                    />
+                    <div class="flex justify-center mt-4">
+                        <button
+                            @click="printReceipt"
+                            class="px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-700"
+                        >
+                            Print Receipt
+                        </button>
+                    </div>
+                </div>
+            </div>
 
             <!-- Pagination -->
             <div class="flex justify-end mt-4">

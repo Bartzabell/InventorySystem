@@ -18,6 +18,7 @@ class InventoryController extends Controller
         $inventories = Inventory::query()
             ->when($search, function ($query, $search) {
                 return $query->where('item_code', 'like', "%{$search}%")
+                    ->orWhere('id', 'like', "%{$search}%")
                     ->orWhere('item_description', 'like', "%{$search}%")
                     ->orWhere('item_price', 'like', "%{$search}%")
                     ->orWhere('item_qty', 'like', "%{$search}%");
