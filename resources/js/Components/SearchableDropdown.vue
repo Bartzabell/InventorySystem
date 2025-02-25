@@ -31,11 +31,21 @@ const updateFilteredItems = () => {
     .slice(0, 100);
 };
 
+// Call updateFilteredItems immediately on mount
+onMounted(() => {
+  updateFilteredItems();
+});
+
 const debouncedSearch = debounce(updateFilteredItems, 300);
 
 watch(searchQuery, () => {
   debouncedSearch();
 });
+
+// Watch for changes in items to update filtered list
+watch(() => props.items, () => {
+  updateFilteredItems();
+}, { immediate: true });
 
 watch(() => props.modelValue, (newValue) => {
   if (newValue) {

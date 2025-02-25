@@ -163,7 +163,7 @@ const cancelSale = (id) => {
                             <div class="gap-x-2">
                                 <button
                                     @click="cancelSale(sale.id)"
-                                    class="text-red-500 hover:text-red-700"
+                                    class="p-2 text-red-500 hover:text-red-700"
                                 >
                                     Cancel
                                 </button>
