@@ -13,7 +13,7 @@ class Sale extends Model
         'item_id', 'item_qty', 'amount_sold', 'customer', 'created_by', 'updated_by', 'deleted_by'
     ];
 
-    public function createdBy(){
+    public function inventory(){
         return $this->belongsTo(Inventory::class, 'item_id', 'id');
     }
 }

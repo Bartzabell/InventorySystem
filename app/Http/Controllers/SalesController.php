@@ -16,9 +16,9 @@ class SalesController extends Controller
     {
         $search = $request->input('search');
 
-        $sales = Sale::with('createdBy')
+        $sales = Sale::with('inventory')
             ->when($search, function ($query, $search) {
-                return $query->whereHas('createdBy', function ($q) use ($search) {
+                return $query->whereHas('inventory', function ($q) use ($search) {
                     $q->where('item_code', 'like', "%{$search}%");
                 })
                 ->orWhere('customer', 'like', "%{$search}%");
