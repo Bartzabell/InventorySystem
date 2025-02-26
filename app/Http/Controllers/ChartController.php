@@ -79,6 +79,72 @@ class ChartController extends Controller
         return $data;
     }
 
+    /**
+     * Get monthly item sales by item_code
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getItemSales(Request $request)
+    {
+        try {
+            Log::info("ChartController::getItemSales() called");
+            $year = $request->input('year', now()->year);
+            // Get the month names for labels
+            $labels = [];
+            for ($i = 1; $i <= 12; $i++) {
+                $labels[] = date('M', mktime(0, 0, 0, $i, 1));
+            }
+            // Get items sold by month, grouped by item_id with inventory relationship
+            $itemSales = Sale::with('inventory')
+                ->select(
+                    'item_id',
+                    DB::raw('MONTH(created_at) as month'),
+                    DB::raw('SUM(amount_sold) as total')
+                )
+                ->whereYear('created_at', $year)
+                ->groupBy('item_id', DB::raw('MONTH(created_at)'))
+                ->orderBy('item_id')
+                ->orderBy(DB::raw('MONTH(created_at)'))
+                ->get();
+
+            // Group by item_code from inventory relationship
+            $itemsData = [];
+            foreach ($itemSales as $sale) {
+                // Get item_code from the inventory relationship where inventory.id = sale.item_id
+                $itemCode = $sale->inventory->item_code;
+
+                if (!isset($itemsData[$itemCode])) {
+                    $itemsData[$itemCode] = array_fill(0, 12, 0);
+                }
+                // Arrays are 0-indexed, but months are 1-indexed
+                $itemsData[$itemCode][$sale->month - 1] = (float) $sale->total;
+            }
+
+            // Format for ApexCharts
+            $series = [];
+            foreach ($itemsData as $itemCode => $monthlySales) {
+                $series[] = [
+                    'name' => $itemCode,
+                    'data' => $monthlySales
+                ];
+            }
+
+            return response()->json([
+                'series' => $series,
+                'labels' => $labels,
+                'year' => $year
+            ]);
+        } catch (\Exception $e) {
+            Log::error("Error in getItemSales: " . $e->getMessage());
+            return response()->json([
+                'error' => $e->getMessage(),
+                'series' => [],
+                'labels' => []
+            ], 500);
+        }
+    }
+
     // Keep the sample data method for fallback if needed
     private function getSampleData()
     {

@@ -9,3 +9,4 @@ Route::get('/user', function (Request $request) {
 })->middleware('auth:sanctum');
 
 Route::get('/sales/yearly', [ChartController::class, 'getYearlySales']);
+Route::get('/sales/items', [ChartController::class, 'getItemSales']);

@@ -2,7 +2,7 @@
 import { ref, onMounted } from 'vue';
 import AppLayout from '@/Layouts/AppLayout.vue';
 import axios from 'axios';
-import ApexCharts from 'apexcharts'
+import ItemSalesChart from '@/Components/ItemSalesChart.vue'; // Import the new component
 
 const chartOptions = ref({
     chart: {
@@ -57,7 +57,7 @@ onMounted(() => {
 
         <div class="py-12">
             <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
-                <div class="p-6 overflow-hidden bg-white shadow-xl sm:rounded-lg">
+                <div class="p-6 mb-6 overflow-hidden bg-white shadow-xl sm:rounded-lg">
                     <h3 class="mb-2 text-lg font-medium text-gray-700">Sales Performance</h3>
                     <div v-if="loading" class="flex items-center justify-center h-80">
                         <div class="w-12 h-12 border-t-2 border-b-2 border-blue-500 rounded-full animate-spin"></div>
@@ -65,6 +65,11 @@ onMounted(() => {
                     <div v-else class="h-96">
                         <apexchart type="line" height="100%" :options="chartOptions" :series="series"></apexchart>
                     </div>
+                </div>
+
+                <!-- Item Sales Chart -->
+                <div class="p-6 overflow-hidden bg-white shadow-xl sm:rounded-lg">
+                    <ItemSalesChart height="400px" :refreshInterval="300000" />
                 </div>
             </div>
         </div>
