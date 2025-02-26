@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ChartController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\InventoryController;
@@ -35,3 +36,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/sales', [SalesController::class, 'store'])->name('sales.store');
     Route::delete('/sales/{sale}', [SalesController::class, 'destroy'])->name('sales.destroy');
 });
+
+Route::get('/sales/yearly', [ChartController::class, 'getYearlySales']);
+Route::get('/sales/items', [ChartController::class, 'getItemSales']);
