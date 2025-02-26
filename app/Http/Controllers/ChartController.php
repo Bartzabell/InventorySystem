@@ -51,16 +51,31 @@ class ChartController extends Controller
 
     private function getMonthlySalesData($year)
     {
-        $monthlySales = Sale::select(
-                DB::raw('EXTRACT(MONTH FROM created_at) as month'),
-                DB::raw('SUM(amount_sold) as total')
-            )
-            ->whereRaw('EXTRACT(YEAR FROM created_at) = ?', [$year])
-            ->groupBy(DB::raw('EXTRACT(MONTH FROM created_at)'))
-            ->orderBy(DB::raw('EXTRACT(MONTH FROM created_at)'))
-            ->get()
-            ->pluck('total', 'month')
-            ->toArray();
+        $connection = DB::getDefaultConnection();
+
+        if ($connection === 'pgsql') {
+            $monthlySales = Sale::select(
+                    DB::raw('EXTRACT(MONTH FROM created_at) as month'),
+                    DB::raw('SUM(amount_sold) as total')
+                )
+                ->whereRaw('EXTRACT(YEAR FROM created_at) = ?', [$year])
+                ->groupBy(DB::raw('EXTRACT(MONTH FROM created_at)'))
+                ->orderBy(DB::raw('EXTRACT(MONTH FROM created_at)'))
+                ->get()
+                ->pluck('total', 'month')
+                ->toArray();
+        } else {
+            $monthlySales = Sale::select(
+                    DB::raw('MONTH(created_at) as month'),
+                    DB::raw('SUM(amount_sold) as total')
+                )
+                ->whereYear('created_at', $year)
+                ->groupBy(DB::raw('MONTH(created_at)'))
+                ->orderBy(DB::raw('MONTH(created_at)'))
+                ->get()
+                ->pluck('total', 'month')
+                ->toArray();
+        }
 
         // Fill in zeros for months with no sales
         $data = [];
@@ -82,17 +97,33 @@ class ChartController extends Controller
                 $labels[] = date('M', mktime(0, 0, 0, $i, 1));
             }
 
-            $itemSales = Sale::with('inventory')
-                ->select(
-                    'item_id',
-                    DB::raw('EXTRACT(MONTH FROM created_at) as month'),
-                    DB::raw('SUM(amount_sold) as total')
-                )
-                ->whereRaw('EXTRACT(YEAR FROM created_at) = ?', [$year])
-                ->groupBy('item_id', DB::raw('EXTRACT(MONTH FROM created_at)'))
-                ->orderBy('item_id')
-                ->orderBy(DB::raw('EXTRACT(MONTH FROM created_at)'))
-                ->get();
+            $connection = DB::getDefaultConnection();
+
+            if ($connection === 'pgsql') {
+                $itemSales = Sale::with('inventory')
+                    ->select(
+                        'item_id',
+                        DB::raw('EXTRACT(MONTH FROM created_at) as month'),
+                        DB::raw('SUM(amount_sold) as total')
+                    )
+                    ->whereRaw('EXTRACT(YEAR FROM created_at) = ?', [$year])
+                    ->groupBy('item_id', DB::raw('EXTRACT(MONTH FROM created_at)'))
+                    ->orderBy('item_id')
+                    ->orderBy(DB::raw('EXTRACT(MONTH FROM created_at)'))
+                    ->get();
+            } else {
+                $itemSales = Sale::with('inventory')
+                    ->select(
+                        'item_id',
+                        DB::raw('MONTH(created_at) as month'),
+                        DB::raw('SUM(amount_sold) as total')
+                    )
+                    ->whereYear('created_at', $year)
+                    ->groupBy('item_id', DB::raw('MONTH(created_at)'))
+                    ->orderBy('item_id')
+                    ->orderBy(DB::raw('MONTH(created_at)'))
+                    ->get();
+            }
 
             $itemsData = [];
             foreach ($itemSales as $sale) {
