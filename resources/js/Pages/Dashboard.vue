@@ -2,6 +2,7 @@
 import { ref, onMounted } from 'vue';
 import AppLayout from '@/Layouts/AppLayout.vue';
 import axios from 'axios';
+import ApexCharts from 'apexcharts'
 
 const chartOptions = ref({
     chart: {
