@@ -6,5 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class RequestForm extends Model
 {
-    //
+    protected $fillable = [
+
+    ];
 }

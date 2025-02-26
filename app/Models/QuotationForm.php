@@ -6,5 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class QuotationForm extends Model
 {
-    //
+    protected $fillable = [
+
+    ];
 }
