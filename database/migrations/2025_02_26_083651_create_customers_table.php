@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('customer_name');
             $table->string('contact_person');
             $table->string('phone_number');
-            $table->email('email');
+            $table->string('email')->unique();
             $table->string('tin_no');
             $table->string('address');
             $table->unsignedBigInteger('created_by')->nullable();

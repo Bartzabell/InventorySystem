@@ -19,13 +19,13 @@ return new class extends Migration
             $table->string('item_description');
             $table->string('category');
             $table->string('type');
-            $table->integer('first_dimention')->nullable();
+            $table->integer('first_dimension')->nullable();
             $table->string('first_unit')->nullable();
-            $table->integer('second_dimention')->nullable();
+            $table->integer('second_dimension')->nullable();
             $table->string('second_unit')->nullable();
-            $table->integer('third_dimention')->nullable();
+            $table->integer('third_dimension')->nullable();
             $table->string('third_unit')->nullable();
-            $table->integer('fourth_dimention')->nullable();
+            $table->integer('fourth_dimension')->nullable();
             $table->string('fourth_unit')->nullable();
             $table->integer('weight')->nullable();
             $table->string('weight_unit')->nullable();
