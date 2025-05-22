@@ -52,9 +52,6 @@ const logout = () => {
                                 <NavLink :href="route('dashboard')" :active="route().current('dashboard')">
                                     Dashboard
                                 </NavLink>
-                                <!-- <NavLink :href="route('inventory')" :active="route().current('inventory')">
-                                    Inventory System
-                                </NavLink> -->
                             </div>
                             <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                                 <NavLink :href="route('customer.index')" :active="route().current('customer.index')">

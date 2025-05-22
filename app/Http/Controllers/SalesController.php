@@ -26,6 +26,7 @@ class SalesController extends Controller
             ->paginate(5)
             ->appends($request->query());
 
+        //for drop down select
         $inventory = Inventory::select('id', 'item_code', 'item_description', 'item_qty', 'item_price')
             ->where('item_qty', '>', 0)
             ->get();

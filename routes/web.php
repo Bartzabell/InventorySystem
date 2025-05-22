@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ChartController;
 use App\Http\Controllers\CustomerController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -37,4 +38,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::delete('/sales/{sale}', [SalesController::class, 'destroy'])->name('sales.destroy');
 
     Route::get('/customer', [CustomerController::class, 'index'])->name('customer.index');
+    Route::post('/customer', [CustomerController::class, 'store'])->name('customer.store');
+    Route::put('/customer/{customer}', [CustomerController::class, 'update'])->name('customer.update');
+    // Route::delete('/inventory/{inventory}', [InventoryController::class, 'destroy'])->name('inventory.destroy');
+    Route::get('/sales/yearly', [ChartController::class, 'getYearlySales']);
+    Route::get('/sales/items', [ChartController::class, 'getItemSales']);
 });

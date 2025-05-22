@@ -33,4 +33,54 @@ class CustomerController extends Controller
             'filters' => $request->only('search')
         ]);
     }
+
+    //this STORE IS FOR CREATE
+    public function store(Request $request)
+    {
+        $request->validate([
+            'customer_name' => 'required|string|max:255',
+            'contact_person' => 'required|string|max:255',
+            'phone_number' => 'required|string|min:10',
+        ]);
+
+        Customer::create([
+            'customer_name' => $request->customer_name,
+            'contact_person' => $request->contact_person,
+            'phone_number' => $request->phone_number,
+            'email' => $request->email,
+            'tin_no' =>$request->tin_no,
+            'address' =>$request->address,
+            'created_by' => Auth::id(),
+        ]);
+
+        return redirect()->route('customer.index');
+    }
+
+    //this UPDATE IS FOR EDIT
+    public function update(Request $request, Customer $customer)
+    {
+        $request->validate([
+            'customer_name' => 'required|string|max:255',
+            'contact_person' => 'required|string|max:255',
+            'phone_number' => 'required|string|min:10',
+        ]);
+
+        $customer->update([
+            'customer_name' => $request->customer_name,
+            'contact_person' => $request->contact_person,
+            'phone_number' => $request->phone_number,
+            'email' => $request->email,
+            'tin_no' =>$request->tin_no,
+            'address' =>$request->address,
+            'updated_by' => Auth::id(),
+        ]);
+        return redirect()->route('customer.index');
+    }
+
+    // FOR DELETE
+    public function destroy(Customer $inventory)
+    {
+        $inventory->delete();
+        return redirect()->route('customer.index');
+    }
 }

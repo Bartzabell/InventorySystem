@@ -51,7 +51,7 @@ watch(() => props.modelValue, (newValue) => {
   if (newValue) {
     const selected = props.items.find(item => item.id === newValue);
     if (selected) {
-      selectedLabel.value = `${selected.item_code} - ${selected.item_description} (Stock: ${selected.item_qty})`;
+      selectedLabel.value = '${selected.item_code} - ${selected.item_description} (Stock: ${selected.item_qty})';
     }
   } else {
     selectedLabel.value = '';
